@@ -26,12 +26,13 @@ sigma = zeros(1, size(X, 2));
 % Hint: You might find the 'mean' and 'std' functions useful.
 %       
 
+mu = mean(X);       % returns a row vector
+sigma = std(X);     % returns a row vector
+m = size(X, 1);     % returns the number of rows in X
+mu_matrix = ones(m, 1) * mu;
+sigma_matrix = ones(m, 1) * sigma;
 
-
-
-
-
-
+X_norm = (X - mu_matrix) ./ sigma_matrix;
 
 
 % ============================================================

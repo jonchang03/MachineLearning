@@ -16,12 +16,11 @@ for iter = 1:num_iters
     % Hint: While debugging, it can be useful to print out the values
     %       of the cost function (computeCost) and gradient here.
     %
-
-
-
-
-
-
+    h = X * theta;          % hypothesis vector
+    errors = h - y;         % difference between 'h' vector and 'y' vector
+    theta_change = (alpha / m) * X' * errors;
+    theta = theta - theta_change;
+    
 
     % ============================================================
 
