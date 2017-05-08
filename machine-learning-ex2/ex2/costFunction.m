@@ -20,11 +20,15 @@ grad = zeros(size(theta));
 % Note: grad should have the same dimensions as theta
 %
 
-
-
-
-
-
+% Vectorizing the Cost function
+h = sigmoid(X * theta);         % hypothesis function
+A = -y' * log(h);               % first term in Cost function
+B = (1-y)' *log(1-h);           % second term in Cost
+J = (1/m) .* (A - B);
+ 
+% Vectorizing the gradient calculation
+grad = (1/m) * (h - y)' * X;    % take the gradient
+grad = grad';
 
 
 % =============================================================
