@@ -21,12 +21,23 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+% 1. Add a column of 1's to X (the first column), and it becomes 'a1'.
+a1 = [ones(m,1), X];
 
+% 2. Multiply by Theta1 and you have 'z2'.
+z2 = a1 * Theta1';
 
+% 3. Compute the sigmoid() of 'z2', then add a column of 1's, and it becomes 'a2'
+a2 = [ones(m,1), sigmoid(z2)];
 
+% 4. Multiply by Theta2, compute the sigmoid() and it becomes 'a3'.
+a3 = sigmoid(a2 * Theta2');
 
-
-
+% 5. Now use the max(a3, [], 2) function to return two vectors - one of the 
+% highest value for each row, and one with its index. Ignore the highest values. 
+% Keep the vector of the indexes where the highest values were found. 
+% These are your predictions.
+[v p] = max(a3, [], 2);
 
 
 % =========================================================================

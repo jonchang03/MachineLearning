@@ -30,10 +30,8 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
-
-
-
-
+prob = sigmoid(X*all_theta');       % signmoid of product of X and all_theta
+[v p] = max(prob, [], 2);           % value and index of classifier (by each row) 
 
 
 % =========================================================================
