@@ -39,6 +39,33 @@ Theta2_grad = zeros(size(Theta2));
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
 %
+
+% Step 1 - Expand the 'y' output values into a matrix of single values
+eye_matrix = eye(num_labels);
+y_matrix = eye_matrix(y,:);
+
+% Step 2 - Forward Propogation
+a1 = [ones(m,1), X];
+z2 = a1 * Theta1';
+a2 = [ones(m,1), sigmoid(z2)];
+z3 = a2 * Theta2';
+a3 = sigmoid(z3); % h_theta = a3
+
+% Step 3 - Cost Function, non-regularized
+% Hint: Terms which lie on the main diagonal are the same terms that result 
+% from the double-sum of the element-wise product.
+% Compute the sum of the diagonal elements using the "trace()" 
+% command, or by sum(sum(...)) after element-wise multiplying by an 
+% identity matrix of size (K x K). 
+
+J = (1/m) * trace((-y_matrix' * log(a3) ...
+            - (1-y_matrix)' * (log(1-a3))));
+
+% Alternatively
+% J2 = (1/m) * sum(sum((-y_matrix .* log(a3) ...
+%            - (1-y_matrix) .* (log(1-a3)))));
+
+    
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
 %         the cost function with respect to Theta1 and Theta2 in Theta1_grad and
@@ -54,6 +81,8 @@ Theta2_grad = zeros(size(Theta2));
 %               over the training examples if you are implementing it for the 
 %               first time.
 %
+
+
 % Part 3: Implement regularization with the cost function and gradients.
 %
 %         Hint: You can implement this around the code for
