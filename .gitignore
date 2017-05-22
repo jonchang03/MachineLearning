@@ -1,3 +1,4 @@
 *.m~
+*.swp
 token.mat
 octave-workspace

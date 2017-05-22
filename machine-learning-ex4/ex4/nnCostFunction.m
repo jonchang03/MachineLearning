@@ -44,7 +44,7 @@ Theta2_grad = zeros(size(Theta2));
 eye_matrix = eye(num_labels);
 y_matrix = eye_matrix(y,:);
 
-% Step 2 - Forward Propogation
+% Step 2 - Forward Propogation (page 6 in slides)
 a1 = [ones(m,1), X];
 z2 = a1 * Theta1';
 a2 = [ones(m,1), sigmoid(z2)];
@@ -58,13 +58,17 @@ a3 = sigmoid(z3); % h_theta = a3
 % command, or by sum(sum(...)) after element-wise multiplying by an 
 % identity matrix of size (K x K). 
 
-J = (1/m) * trace((-y_matrix' * log(a3) ...
-            - (1-y_matrix)' * (log(1-a3))));
+unreg = (1/m) * trace((-y_matrix' * log(a3) - (1-y_matrix)' * (log(1-a3))));
 
 % Alternatively
 % J2 = (1/m) * sum(sum((-y_matrix .* log(a3) ...
 %            - (1-y_matrix) .* (log(1-a3)))));
 
+% Step 4 - Cost Regularization (using formula on page 6)
+% Important - ignore columns of bias units!
+reg = (lambda/(2*m)) * (sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2))); 
+
+J = unreg + reg; % add regularized cost to unregularized cost
     
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
@@ -83,6 +87,37 @@ J = (1/m) * trace((-y_matrix' * log(a3) ...
 %
 
 
+% look at tutorial for ex4
+% 1. forward propagation already done
+d3 = a3 - y_matrix; % 2.
+z2 = a1 * Theta1'; % 3.
+
+% 4. no bias, so start from 2nd column
+% d2 is the product of d3 and Theta2(no bias), then element-wise scaled by 
+% sigmoid gradient of z2.
+d2 = sigmoidGradient(z2) .* (d3 * Theta2(:,2:end));
+
+Delta1 = d2' * a1; % 5.
+Delta2 = d3' * a2; % 6.
+
+% 7. Scale by 1/m
+Theta1_grad = (1/m) * Delta1;
+Theta2_grad = (1/m) * Delta2;
+
+% 8. set the first column of Theta1 and Theta2 to all-zeros
+Theta1(:,1) = 0;
+Theta2(:,1) = 0;
+
+% 9. Scale each Theta matrix by ?/m
+Theta1 = (lambda/m) * Theta1;
+Theta2 = (lambda/m) * Theta2;
+
+% 10. Add each of these modified-and-scaled Theta matrices to 
+% the un-regularized Theta gradients that you computed earlier.
+Theta1_grad = Theta1_grad + Theta1;
+Theta2_grad = Theta2_grad + Theta2;
+
+
 % Part 3: Implement regularization with the cost function and gradients.
 %
 %         Hint: You can implement this around the code for
@@ -90,20 +125,6 @@ J = (1/m) * trace((-y_matrix' * log(a3) ...
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
